@@ -1,0 +1,27 @@
+class <%= rdo.dataBlock.meta.key %> {
+  caption: string;
+  gridSize: number;
+  formWidth: number;
+  formHeight: number;
+  toolbarTop: boolean;
+  setCaption(caption: string) {
+    this.caption = caption;
+  }
+  setGridSize(size: number) {
+    this.gridSize = size;
+  }
+  setToolbarPosition(status: boolean) {
+    this.toolbarTop = status;
+  }
+  setFormSize(x: number, y: number) {
+    this.formWidth = x;
+    this.formHeight = y;
+  }
+}
+
+const instance = new <%= rdo.dataBlock.meta.key %>();
+
+instance.setCaption("<%= rdo.dataBlock.data.sobjCaption %>");
+instance.setGridSize(<%= rdo.dataBlock.data.sobjGridSize %>);
+instance.setToolbarPosition(<%= rdo.dataBlock.data.sobjTopToolbar %>);
+instance.setFormSize(<%= rdo.dataBlock.data.sobjFormWidth %>, <%= rdo.dataBlock.data.sobjFormHeight %>);

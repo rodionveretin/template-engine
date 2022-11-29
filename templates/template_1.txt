@@ -1,4 +1,0 @@
-class Test {
-  name: "<%= rdo.name %>";
-  age: "<%= rdo.surname %>";
-}

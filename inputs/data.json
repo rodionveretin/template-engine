@@ -1,4 +1,42 @@
 {
-  "name": "John",
-  "surname": "Doe"
+  "info": {
+    "dimension": "single"
+  },
+  "dataBlock": {
+    "meta": {
+      "key": "REESTR_IP",
+      "type": "SYS_OBJECTS",
+      "editable": false
+    },
+    "data": {
+      "sobjStretchLastOnRow": "true",
+      "sobjCaption": "Исполнительное производство", 
+      "sobjDefaultClassId": "200",
+      "sobjGridSize": "80",
+      "sobjSubsystem": "CLAIMER",
+      "sobjTopToolbar": "false",
+      "sobjViewAsTree": "false",
+      "sobjFormHeight": "200",
+      "sobjManualLayout": "true",
+      "sobjListAsFormFieldOrder": "false",
+      "sobjTitlePattern": "{DOCSTATUS_CAPTION}",
+      "sobjFormWidth": "270",
+      "sobjIsSystem": "false",
+      "sobjWebFormInSingleWindow": "true",
+      "sobjProfileEditorVisibility": "7",
+      "sobjIsRpl": "false",
+      "sobjPrivate": "false",
+      "sobjNotActual": "false",
+      "sobjViewOnlyAsTree": "false",
+      "sobjGroupActionCode": "CLAIMER.READ_ONLY",
+      "sobjListAsFormFieldWidth": "false",
+      "sobjMaxLabelSize": "0",
+      "sobjLogChanges": "true",
+      "sobjFilterPanel": "CUSTOM_SQL_FILTER_PANEL",
+      "sobjVersionobsolete": "false",
+      "sobjNameParent": "DOCUMENT",
+      "sobjKind": "TBL",
+      "sobjName": "REESTR_IP"
+    }
+  }
 }

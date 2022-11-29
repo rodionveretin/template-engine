@@ -1,13 +1,20 @@
 import * as eta from 'eta';
 import * as fs from 'fs';
 
-import './config.js'
+import './config.js';
 
+const fileContent = fs.readFileSync("inputs/data.json", "utf8"); // получение данных
 
-const fileContent = JSON.parse(fs.readFileSync("inputs/data.json", "utf8")); // парсинг json из inputs
+let jsonData;
 
-const template = fs.readFileSync("templates/template_1.txt", "utf8"); // получение шаблона из templates
+try {
+  jsonData = JSON.parse(fileContent); // парсинг json
+  const template = fs.readFileSync(`templates/${jsonData.dataBlock.meta.key}.txt`, "utf8"); // получение шаблона из templates
 
-const result = eta.render(template, fileContent);  // генерация результата
+  const result = await eta.render(template, jsonData);  // генерация результата
 
-fs.writeFileSync("outputs/result.ts", result);
+  fs.writeFileSync(`outputs/${jsonData.dataBlock.meta.key}.ts`, result);
+
+} catch (e) {
+  console.error(e);
+}
