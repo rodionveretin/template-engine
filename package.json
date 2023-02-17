@@ -1,0 +1,21 @@
+{
+  "name": "template_engine",
+  "version": "1.0.3",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "build": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eta": "^1.12.3",
+    "fs": "^0.0.1-security",
+    "type-name": "^2.0.2"
+  },
+  "type": "module",
+  "devDependencies": {
+    "eslint": "^8.34.0"
+  }
+}

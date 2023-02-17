@@ -1,0 +1,19 @@
+# Файлы и папки операционной системы
+.DS_Store
+Thumbs.db
+
+# Файлы редактора
+.idea
+.vscode
+
+# Вспомогательные файлы
+*.log*
+node_modules/
+package-lock.json
+.eslintrc.cjs
+
+#
+napi.js
+dist
+templates
+connection.js
