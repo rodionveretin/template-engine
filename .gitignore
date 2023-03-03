@@ -13,7 +13,7 @@ package-lock.json
 .eslintrc.cjs
 
 #
-napi.js
+napi.ts
+build
 dist
 templates
-connection.js
