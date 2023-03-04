@@ -7,6 +7,12 @@ import { connectionData } from './napi.js';
 
 setConfig();
 
+interface Options {
+  readonly templatePath: string,
+  readonly outDir: String,
+  readonly fileName: String,
+}
+
 class API {
   url: string;
   credential: string;
@@ -35,7 +41,23 @@ class API {
       });
     });
   }
-  
+}
+
+class Template {
+  data: string;
+  options: Options;
+
+  constructor(data: string, options: Options) {
+    this.data = data;
+    this.options = options;
+  }
+
+  async createFile() {
+    const template = fs.readFileSync(this.options.templatePath, 'utf8');
+    const result = await eta.render(template, this.data);
+    const savePath = `${this.options.outDir}/${this.options.fileName}.ts`;
+    fs.writeFileSync(savePath, <string>result);
+  }
 }
 
 const apiCall = new API(connectionData.url, connectionData.encodedCredential);
@@ -44,10 +66,14 @@ try {
   const data = await apiCall.getData();
   const result = JSON.parse(data);
 
-  const template = fs.readFileSync('templates/template.ts', 'utf8');
   for (const item of result.dataBlock) {
-    const result = await eta.render(template, item);
-    fs.writeFileSync(`dist/${item.meta.key}.ts`, <string>result);
+    const options: Options = {
+      templatePath: "templates/template.ts",
+      outDir: "dist",
+      fileName: item.meta.key,
+    }
+    const template = new Template(item, options);
+    template.createFile();
   }
 } catch (e) {
   console.error(e);
