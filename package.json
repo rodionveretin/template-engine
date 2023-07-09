@@ -1,24 +1,21 @@
 {
   "name": "template_engine",
   "version": "1.0.4",
-  "description": "",
-  "main": "app.js",
   "scripts": {
     "build": "tsc",
     "start": "node build/app.js"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "dependencies": {
-    "eta": "^1.12.3",
-    "fs": "^0.0.1-security",
-    "type-name": "^2.0.2"
+    "eta": "^2.2.0",
+    "fs": "^0.0.1-security"
   },
   "type": "module",
   "devDependencies": {
     "@types/node": "^18.14.5",
-    "eslint": "^8.34.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "eslint": "^8.36.0",
     "typescript": "^4.9.5"
   }
 }

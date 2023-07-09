@@ -9,8 +9,8 @@ setConfig();
 
 interface Options {
   readonly templatePath: string,
-  readonly outDir: String,
-  readonly fileName: String,
+  readonly outputDir: string,
+  readonly fileName: string,
 }
 
 class API {
@@ -44,18 +44,22 @@ class API {
 }
 
 class Template {
-  data: string;
-  options: Options;
+  data: object;
+  templatePath: string;
+  outputDir: string;
+  fileName: string;
 
-  constructor(data: string, options: Options) {
+  constructor(data: object, options: Options) {
     this.data = data;
-    this.options = options;
+    this.templatePath = options.templatePath;
+    this.outputDir = options.outputDir;
+    this.fileName = options.fileName;
   }
 
   async createFile() {
-    const template = fs.readFileSync(this.options.templatePath, 'utf8');
-    const result = await eta.render(template, this.data);
-    const savePath = `${this.options.outDir}/${this.options.fileName}.ts`;
+    const template = fs.readFileSync(this.templatePath, 'utf8');
+    const result = eta.render(template, this.data);
+    const savePath = `${this.outputDir}/${this.fileName}.ts`;
     fs.writeFileSync(savePath, <string>result);
   }
 }
@@ -69,7 +73,7 @@ try {
   for (const item of result.dataBlock) {
     const options: Options = {
       templatePath: "templates/template.ts",
-      outDir: "dist",
+      outputDir: "dist",
       fileName: item.meta.key,
     }
     const template = new Template(item, options);
