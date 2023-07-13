@@ -10,7 +10,7 @@ setConfig();
 interface Options {
   readonly templatePath: string,
   readonly outputDir: string,
-  readonly fileName: string,
+  readonly splitResult: boolean,
 }
 
 class API {
@@ -47,20 +47,38 @@ class Template {
   data: object;
   templatePath: string;
   outputDir: string;
-  fileName: string;
+  splitResult: boolean;
 
   constructor(data: object, options: Options) {
     this.data = data;
     this.templatePath = options.templatePath;
-    this.outputDir = options.outputDir;
-    this.fileName = options.fileName;
+    this.outputDir = this.sanitizePath(options.outputDir);
+    this.splitResult = options.splitResult;
   }
 
-  async createFile() {
+  handleFiles() {
+    if (this.splitResult === true) {
+      for (const item in this.data) {
+        const result = this.renderFile(this.data[item]);
+        const fileName = this.data[item].meta.key;
+        const savePath = `${this.outputDir}/${fileName}.ts`;
+        fs.writeFileSync(savePath, <string>result);
+      }
+    } else if (this.splitResult === false) {
+      const result = this.renderFile(this.data);
+      const savePath = `${this.outputDir}/result.ts`;
+      fs.writeFileSync(savePath, <string>result);
+    }
+  }
+
+  renderFile(data): string {
     const template = fs.readFileSync(this.templatePath, 'utf8');
-    const result = eta.render(template, this.data);
-    const savePath = `${this.outputDir}/${this.fileName}.ts`;
-    fs.writeFileSync(savePath, <string>result);
+    return eta.render(template, data);
+  }
+
+  sanitizePath(path): string {
+    const regex = /\/$/;
+    return path.replace(regex, '');
   }
 }
 
@@ -70,15 +88,13 @@ try {
   const data = await apiCall.getData();
   const result = JSON.parse(data);
 
-  for (const item of result.dataBlock) {
-    const options: Options = {
-      templatePath: "templates/template.ts",
-      outputDir: "dist",
-      fileName: item.meta.key,
-    }
-    const template = new Template(item, options);
-    template.createFile();
+  const options: Options = {
+    templatePath: "templates/template.ts",
+    outputDir: "dist",
+    splitResult: false,
   }
+  const template = new Template(result.dataBlock, options);
+  template.handleFiles();
 } catch (e) {
   console.error(e);
-} 
+}

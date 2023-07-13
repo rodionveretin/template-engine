@@ -1,9 +1,10 @@
 {
   "name": "template_engine",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scripts": {
     "build": "tsc",
-    "start": "node build/app.js"
+    "start": "node build/app.js",
+    "test": "tsc && node build/app.js"
   },
   "license": "ISC",
   "dependencies": {

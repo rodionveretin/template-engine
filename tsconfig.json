@@ -5,6 +5,12 @@
     "target": "ES2020",
     "sourceMap": true,
     "outDir": "build",
+    "lib": [
+      "es5",
+      "es6",
+      "dom",
+      "dom.iterable"
+    ]
   },
   "include": [
     "src/**/*"
