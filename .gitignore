@@ -17,3 +17,4 @@ napi.ts
 build
 dist
 templates
+config.json
