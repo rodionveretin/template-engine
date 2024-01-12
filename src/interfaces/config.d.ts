@@ -33,9 +33,16 @@ interface Api {
   credential?: string,
 }
 
+interface Filename {
+  titleField: string,
+  postfix?: string,
+  function?: string,
+}
+
 interface Params {
   entry?: string,
   splitResult: boolean,
+  name: Filename,
 }
 
 interface Data {

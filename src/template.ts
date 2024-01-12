@@ -1,5 +1,6 @@
 import * as fs from 'fs';
-import { Eta } from '../node_modules/eta/dist/types/index.js';
+import { Eta } from 'eta';
+import { Eta as EtaCore } from '../node_modules/eta/dist/types/index.js';
 import { Params } from './interfaces/config.js';
 
 type JSONValue =
@@ -10,19 +11,26 @@ type JSONValue =
   | Array<JSONValue>;
 
 export class Template {
-  readonly engine: Eta;
+  readonly engine: EtaCore;
   readonly data: JSONValue | Record<string, never>;
 
   readonly entry: string;
   readonly splitResult: boolean;
 
+  readonly titleField: string;
+  readonly postfix: string;
+  readonly sanitizeFunc: string;
+
   readonly template: string;
   readonly outputDir: string;
 
-  constructor(engine: Eta, data: JSONValue | Record<string, never>, params: Params, template: string, outputDir: string) {
+  constructor(engine: EtaCore, data: JSONValue | Record<string, never>, params: Params, template: string, outputDir: string) {
     this.engine = engine;
     this.entry = params.entry;
-    this.data = this.entry ? this.getDataByRoot(data, this.entry) : data;
+    this.titleField = params.name.titleField;
+    this.postfix = params.name.postfix;
+    this.sanitizeFunc = params.name.function;
+    this.data = this.entry ? this.getDataByPath(data, this.entry) : data;
     this.splitResult = params.splitResult;
     this.template = template;
     this.outputDir = this.sanitizePath(outputDir);
@@ -37,25 +45,38 @@ export class Template {
   handleFiles() {
     if (Object.keys(this.data).length !== 0) {
       let content = '';
-      const date = Date.now();
       for (let i = 0; i < Object.keys(this.data).length; i++) {
         const dataItem = this.data[i];
         const result = this.renderFile(dataItem);
         content += result;
+        const unsanitizedName = this.getDataByPath(dataItem, this.titleField);
+        const savePath = this.createFilePath(unsanitizedName, this.postfix, this.sanitizeFunc);
         if (this.splitResult === true) {
-          const fileName = i;
-          const savePath = `${this.outputDir}/${date}_${fileName}.ts`;
           fs.writeFileSync(savePath, <string>result);
         }
       }
 
       if (this.splitResult === false) {
-        fs.writeFileSync(`${this.outputDir}/${date}_united.ts`, <string>content);
+        fs.writeFileSync(`${this.outputDir}/Result${this.postfix}.ts`, <string>content);
       }
     }
   }
 
-  getDataByRoot(data: JSONValue, dataPath: string): JSONValue {
+  createFilePath(name: JSONValue, postfix?: string, sanitizeFunc?: string): string {
+    const sanitizedName = sanitizeFunc ? this.sanitizeName(name, sanitizeFunc) : name;
+    return `${this.outputDir}/${sanitizedName}${postfix}.ts`;
+  }
+
+  sanitizeName(name: JSONValue, sanitizeFunc: string): string {
+    const eta = new Eta({
+      views: 'templates',
+    });
+    const result = eta.render(`utils/${sanitizeFunc}.eta`, { name: name });
+    console.log(result);
+    return result;
+  }
+
+  getDataByPath(data: JSONValue, dataPath: string): JSONValue {
     const keys = dataPath.split('.');
     let value: JSONValue = data;
     for (const key of keys) {
