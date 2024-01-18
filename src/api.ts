@@ -2,11 +2,20 @@ import * as http from 'http';
 import * as https from 'https';
 import { Headers } from './interfaces/api.js';
 
+/** Класс, запросов к API. */
 export class API {
+  /** Url запроса. */
   readonly url: string;
+  /** Данные для подключения в формате Base64. */
   readonly credential: string;
+  /** Заголовки для подключения. */
   readonly options: Headers | Record<string, never>;
 
+  /**
+   * Конструктор класса `API`.
+   * @param {string} url Url запроса.
+   * @param {string} credential Данные для подключения в формате Base64.
+   */
   constructor(url: string, credential?: string) {
     this.url = url;
     this.credential = credential;
@@ -18,6 +27,10 @@ export class API {
     } : {};
   }
 
+  /**
+  * Возвращает результат запроса к API.
+  * @results Промис результата запроса к API.
+  */
   getData(): Promise<string> {
     const url = new URL(this.url);
     const client = (url.protocol === 'https:') ? https : http;

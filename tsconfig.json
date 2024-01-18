@@ -8,6 +8,7 @@
     "outDir": "build",
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "removeComments": true,
     "lib": [
       "es5",
       "es6",

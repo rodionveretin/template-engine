@@ -1,0 +1,6 @@
+<%
+const str = it.name;
+const words = str.toLowerCase().split('_');
+const result = words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+%>
+<%= result %>
